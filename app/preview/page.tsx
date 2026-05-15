@@ -80,7 +80,7 @@ export default function PreviewPage() {
           <div className="hidden md:flex items-center gap-1 flex-shrink-0">
             <DocumentTextIcon className="w-4 h-4 text-blue-500" />
             <span className={`font-bold text-sm ${dark ? 'text-gray-200' : 'text-gray-800'}`}>
-              <span className="text-blue-500">Apply</span>FA
+              رزومه‌ساز <span className="text-blue-500">اختصاصی</span>
             </span>
           </div>
 
@@ -205,7 +205,7 @@ export default function PreviewPage() {
 
       {/* Footer */}
       <footer className={`text-center py-3 text-xs border-t no-print ${dark ? 'border-gray-800 text-gray-500' : 'border-gray-200 text-gray-400'}`}>
-        رزومه‌ساز اختصاصی سایت <span className="font-semibold text-blue-500">اپلای فا</span>
+        <span className="font-semibold text-blue-500">رزومه‌ساز اختصاصی</span>
         {' | '}ساخته شده با <span className="text-red-500">❤️</span> توسط{' '}
         <a href="https://github.com/Alirewa" target="_blank" rel="noopener noreferrer"
           className="font-medium hover:underline text-blue-500">@Alirewa</a>

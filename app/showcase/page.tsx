@@ -38,7 +38,7 @@ export default function ShowcasePage() {
           </Link>
           <div className="flex items-center gap-2">
             <DocumentTextIcon className="w-5 h-5 text-blue-500" />
-            <span className="font-bold text-sm"><span className="text-blue-500">Apply</span>FA</span>
+            <span className="font-bold text-sm">رزومه‌ساز <span className="text-blue-500">اختصاصی</span></span>
           </div>
           <Link href="/builder"
             className="flex items-center gap-1.5 text-sm font-semibold text-white px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 transition">
@@ -169,7 +169,7 @@ export default function ShowcasePage() {
       )}
 
       <footer className={`text-center py-3 text-xs border-t ${dark ? 'border-gray-800 text-gray-500' : 'border-gray-200 text-gray-400'}`}>
-        رزومه‌ساز اختصاصی سایت <span className="font-semibold text-blue-500">اپلای فا</span>
+        <span className="font-semibold text-blue-500">رزومه‌ساز اختصاصی</span>
         {' | '}ساخته شده با <span className="text-red-500">❤️</span> توسط{' '}
         <a href="https://github.com/Alirewa" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">@Alirewa</a>
       </footer>

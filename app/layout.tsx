@@ -3,8 +3,8 @@ import './globals.css'
 import DarkModeSync from '@/components/ui/DarkModeSync'
 
 export const metadata: Metadata = {
-  title: 'رزومه‌ساز | ApplyFA',
-  description: 'رزومه حرفه‌ای خود را با قالب‌های زیبا بسازید — اختصاصی سایت اپلای فا',
+  title: 'رزومه‌ساز اختصاصی',
+  description: 'رزومه حرفه‌ای خود را با قالب‌های زیبا بسازید',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

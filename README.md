@@ -1,6 +1,6 @@
 <div dir="rtl">
 
-# رزومه‌ساز اپلای‌فا | ApplyFA Resume Builder
+# رزومه‌ساز اختصاصی
 
 یک وب‌اپلیکیشن مدرن برای ساخت رزومه‌های حرفه‌ای به زبان‌های فارسی، انگلیسی و آلمانی — با پشتیبانی کامل از RTL و خروجی PDF.
 
@@ -101,7 +101,7 @@ npm run lint     # بررسی کد
 
 <div dir="ltr">
 
-# ApplyFA Resume Builder | رزومه‌ساز اپلای‌فا
+# Resume Builder
 
 A modern web application for building professional resumes in Persian (Farsi), English, and German — with full RTL support and PDF export.
 

@@ -87,7 +87,7 @@ export default function BuilderPage() {
           <div className="flex items-center gap-2">
             <DocumentTextIcon className="w-5 h-5 text-blue-500" />
             <span className={`font-bold text-sm sm:text-base ${dark ? 'text-gray-100' : 'text-gray-800'}`}>
-              <span className="text-blue-500">Apply</span>FA
+              رزومه‌ساز <span className="text-blue-500">اختصاصی</span>
             </span>
           </div>
 
@@ -370,7 +370,7 @@ export default function BuilderPage() {
 
       {/* Footer */}
       <footer className={`text-center py-3 text-xs border-t ${dark ? 'border-gray-800 text-gray-500' : 'border-gray-200 text-gray-400'}`}>
-        رزومه‌ساز اختصاصی سایت <span className="font-semibold text-blue-500">اپلای فا</span>
+        <span className="font-semibold text-blue-500">رزومه‌ساز اختصاصی</span>
         {' | '}ساخته شده با <span className="text-red-500">❤️</span> توسط{' '}
         <a href="https://github.com/Alirewa" target="_blank" rel="noopener noreferrer"
           className="font-medium hover:underline text-blue-500">@Alirewa</a>

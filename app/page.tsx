@@ -50,9 +50,8 @@ export default function HomePage() {
             <DocumentTextIcon className="w-7 h-7 text-blue-500 flex-shrink-0" />
             <div>
               <h1 className="text-base sm:text-lg font-extrabold leading-tight">
-                <span className="text-blue-600">Apply</span>
-                <span className={dark ? 'text-gray-100' : 'text-gray-800'}>FA</span>
-                <span className={`text-xs font-normal mr-2 ${dark ? 'text-gray-400' : 'text-gray-400'}`}>رزومه‌ساز</span>
+                <span className={dark ? 'text-gray-100' : 'text-gray-800'}>رزومه‌ساز </span>
+                <span className="text-blue-600">اختصاصی</span>
               </h1>
             </div>
           </div>
@@ -154,7 +153,7 @@ export default function HomePage() {
 
       {/* Footer */}
       <footer className={`text-center py-4 text-xs border-t ${dark ? 'border-gray-800 text-gray-500' : 'border-gray-200 text-gray-400'}`}>
-        رزومه‌ساز اختصاصی سایت <span className="font-semibold text-blue-500">اپلای فا</span>
+        <span className="font-semibold text-blue-500">رزومه‌ساز اختصاصی</span>
         {' | '}ساخته شده با <span className="text-red-500">❤️</span> توسط{' '}
         <a href="https://github.com/Alirewa" target="_blank" rel="noopener noreferrer"
           className="font-medium hover:underline text-blue-500">@Alirewa</a>
