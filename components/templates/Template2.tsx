@@ -54,7 +54,7 @@ export default function Template2({ data, accentColor = '#1e3a5f' }: Props) {
       </div>
 
       {/* Personal Info */}
-      <SidebarBlock title={t.personalInfo}>
+      <SidebarBlock title={t.personalInfo} isRTL={isRTL}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
           {data.personal.birthDate && <SbRow isRTL={isRTL} icon={Ic.cal} text={`${data.personal.birthDate}${data.personal.birthPlace ? ` · ${data.personal.birthPlace}` : ''}`} />}
           {data.personal.nationality && <SbRow isRTL={isRTL} icon={Ic.globe} text={data.personal.nationality} />}
@@ -65,7 +65,7 @@ export default function Template2({ data, accentColor = '#1e3a5f' }: Props) {
       </SidebarBlock>
 
       {/* Languages */}
-      <SidebarBlock title={t.languages}>
+      <SidebarBlock title={t.languages} isRTL={isRTL}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '7px' }}>
           {data.languages.map((lang) => (
             <div key={lang.id}>
@@ -83,7 +83,7 @@ export default function Template2({ data, accentColor = '#1e3a5f' }: Props) {
       </SidebarBlock>
 
       {/* Certificates */}
-      <SidebarBlock title={t.certificates}>
+      <SidebarBlock title={t.certificates} isRTL={isRTL}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
           {data.certificates.map((cert) => (
             <div key={cert.id} style={{ fontSize: '9px' }}>
@@ -98,7 +98,7 @@ export default function Template2({ data, accentColor = '#1e3a5f' }: Props) {
       </SidebarBlock>
 
       {/* Additional skills */}
-      <SidebarBlock title={t.additionalSkills}>
+      <SidebarBlock title={t.additionalSkills} isRTL={isRTL}>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '3px', justifyContent: isRTL ? 'flex-end' : 'flex-start' }}>
           {data.additionalSkills.map((s, i) => (
             <span key={i} style={{ fontSize: '8.5px', padding: '2px 7px', borderRadius: '99px', background: 'rgba(255,255,255,0.1)', color: '#cbd5e1', border: '1px solid rgba(255,255,255,0.12)' }}>{s}</span>
@@ -108,7 +108,7 @@ export default function Template2({ data, accentColor = '#1e3a5f' }: Props) {
       </SidebarBlock>
 
       {/* Interests */}
-      <SidebarBlock title={t.interests}>
+      <SidebarBlock title={t.interests} isRTL={isRTL}>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '3px', justifyContent: isRTL ? 'flex-end' : 'flex-start' }}>
           {data.interests.map((s, i) => (
             <span key={i} style={{ fontSize: '8.5px', padding: '2px 7px', borderRadius: '99px', background: 'rgba(255,255,255,0.1)', color: '#cbd5e1', border: '1px solid rgba(255,255,255,0.12)' }}>{s}</span>
@@ -135,7 +135,7 @@ export default function Template2({ data, accentColor = '#1e3a5f' }: Props) {
       </div>
 
       {/* Profile */}
-      <MainBlock title={t.profile} accent={accentColor}>
+      <MainBlock title={t.profile} accent={accentColor} isRTL={isRTL}>
         {data.personal.profile
           ? <p style={{ margin: 0, color: '#444', lineHeight: '1.65', fontSize: '10.5px' }}>{data.personal.profile}</p>
           : <MainEmpty text={t.sectionEmpty} isRTL={isRTL} />
@@ -143,7 +143,7 @@ export default function Template2({ data, accentColor = '#1e3a5f' }: Props) {
       </MainBlock>
 
       {/* Experience */}
-      <MainBlock title={t.experience} accent={accentColor}>
+      <MainBlock title={t.experience} accent={accentColor} isRTL={isRTL}>
         {data.experience.map((exp, idx) => (
           <div key={exp.id} style={{ marginBottom: idx < data.experience.length - 1 ? '12px' : 0, display: 'flex', gap: '8px', flexDirection: isRTL ? 'row-reverse' : 'row' }}>
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flexShrink: 0 }}>
@@ -170,7 +170,7 @@ export default function Template2({ data, accentColor = '#1e3a5f' }: Props) {
       </MainBlock>
 
       {/* Skills */}
-      <MainBlock title={t.skills} accent={accentColor}>
+      <MainBlock title={t.skills} accent={accentColor} isRTL={isRTL}>
         {data.skills.map((group) => (
           <div key={group.id} style={{ marginBottom: '7px' }}>
             <p style={{ fontWeight: 700, fontSize: '9.5px', color: accentColor, margin: '0 0 4px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
@@ -187,7 +187,7 @@ export default function Template2({ data, accentColor = '#1e3a5f' }: Props) {
       </MainBlock>
 
       {/* Education */}
-      <MainBlock title={t.education} accent={accentColor}>
+      <MainBlock title={t.education} accent={accentColor} isRTL={isRTL}>
         {data.education.map((edu, idx) => (
           <div key={edu.id} style={{ marginBottom: idx < data.education.length - 1 ? '9px' : 0, display: 'flex', gap: '8px', flexDirection: isRTL ? 'row-reverse' : 'row' }}>
             <div style={{ flexShrink: 0 }}>
@@ -234,10 +234,17 @@ export default function Template2({ data, accentColor = '#1e3a5f' }: Props) {
   )
 }
 
-function SidebarBlock({ title, children }: { title: string; children: React.ReactNode }) {
+function SidebarBlock({ title, isRTL, children }: { title: string; isRTL: boolean; children: React.ReactNode }) {
   return (
     <div>
-      <h3 style={{ fontSize: '9px', fontWeight: 700, color: 'rgba(255,255,255,0.45)', textTransform: 'uppercase', letterSpacing: '0.09em', margin: '0 0 6px', paddingBottom: '4px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+      <h3 style={{
+        fontSize: '9px', fontWeight: 700, color: 'rgba(255,255,255,0.45)',
+        textTransform: isRTL ? 'none' : 'uppercase',
+        letterSpacing: isRTL ? '0' : '0.09em',
+        margin: '0 0 6px', paddingBottom: '4px',
+        borderBottom: '1px solid rgba(255,255,255,0.1)',
+        textAlign: isRTL ? 'right' : 'left',
+      }}>
         {title}
       </h3>
       {children}
@@ -245,12 +252,12 @@ function SidebarBlock({ title, children }: { title: string; children: React.Reac
   )
 }
 
-function MainBlock({ title, accent, children }: { title: string; accent: string; children: React.ReactNode }) {
+function MainBlock({ title, accent, isRTL, children }: { title: string; accent: string; isRTL: boolean; children: React.ReactNode }) {
   return (
     <div>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px', flexDirection: isRTL ? 'row-reverse' : 'row' }}>
         <div style={{ width: '3px', height: '13px', borderRadius: '2px', background: accent, flexShrink: 0 }} />
-        <h2 style={{ margin: 0, fontSize: '10.5px', fontWeight: 700, color: '#0f0f1a', textTransform: 'uppercase', letterSpacing: '0.07em' }}>
+        <h2 style={{ margin: 0, fontSize: '10.5px', fontWeight: 700, color: '#0f0f1a', textTransform: isRTL ? 'none' : 'uppercase', letterSpacing: isRTL ? '0' : '0.07em' }}>
           {title}
         </h2>
       </div>

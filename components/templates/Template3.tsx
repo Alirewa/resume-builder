@@ -44,14 +44,15 @@ export default function Template3({ data, accentColor = '#7c3aed' }: Props) {
         width: '210mm',
         minHeight: '297mm',
         display: 'flex',
+        flexDirection: isRTL ? 'row-reverse' : 'row',
         boxSizing: 'border-box',
       }}
     >
-      {/* Left accent bar */}
+      {/* Accent bar — left for LTR, right for RTL */}
       <div style={{ width: '5px', background: `linear-gradient(180deg, ${accent} 0%, ${accent}88 100%)`, flexShrink: 0 }} />
 
       {/* Content */}
-      <div style={{ flex: 1, padding: '22px 20px 22px 18px', display: 'flex', flexDirection: 'column', gap: '0' }}>
+      <div style={{ flex: 1, padding: isRTL ? '22px 18px 22px 20px' : '22px 20px 22px 18px', display: 'flex', flexDirection: 'column', gap: '0' }}>
 
         {/* ── HEADER ─────────────────────────────── */}
         <div style={{
@@ -125,7 +126,7 @@ export default function Template3({ data, accentColor = '#7c3aed' }: Props) {
           <div style={{ flex: '0 0 62%', display: 'flex', flexDirection: 'column', gap: '14px' }}>
 
             {/* Profile */}
-            <Section title={t.profile} accent={accent}>
+            <Section title={t.profile} accent={accent} isRTL={isRTL}>
               {data.personal.profile
                 ? <p style={{ color: '#444', lineHeight: '1.65', margin: 0 }}>{data.personal.profile}</p>
                 : <EmptySection text={t.sectionEmpty} isRTL={isRTL} />
@@ -133,7 +134,7 @@ export default function Template3({ data, accentColor = '#7c3aed' }: Props) {
             </Section>
 
             {/* Experience */}
-            <Section title={t.experience} accent={accent}>
+            <Section title={t.experience} accent={accent} isRTL={isRTL}>
               {data.experience.length > 0
                 ? <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                     {data.experience.map((exp) => (
@@ -166,7 +167,7 @@ export default function Template3({ data, accentColor = '#7c3aed' }: Props) {
             </Section>
 
             {/* Education */}
-            <Section title={t.education} accent={accent}>
+            <Section title={t.education} accent={accent} isRTL={isRTL}>
               {data.education.length > 0
                 ? <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                     {data.education.map((edu) => (
@@ -198,7 +199,7 @@ export default function Template3({ data, accentColor = '#7c3aed' }: Props) {
           <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '14px' }}>
 
             {/* Languages */}
-            <Section title={t.languages} accent={accent}>
+            <Section title={t.languages} accent={accent} isRTL={isRTL}>
               {data.languages.length > 0
                 ? <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                     {data.languages.map((lang) => (
@@ -222,7 +223,7 @@ export default function Template3({ data, accentColor = '#7c3aed' }: Props) {
             </Section>
 
             {/* Skills */}
-            <Section title={t.skills} accent={accent}>
+            <Section title={t.skills} accent={accent} isRTL={isRTL}>
               {data.skills.length > 0
                 ? <>
                     {data.skills.map((group) => (
@@ -245,7 +246,7 @@ export default function Template3({ data, accentColor = '#7c3aed' }: Props) {
             </Section>
 
             {/* Certificates */}
-            <Section title={t.certificates} accent={accent}>
+            <Section title={t.certificates} accent={accent} isRTL={isRTL}>
               {data.certificates.length > 0
                 ? <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
                     {data.certificates.map((cert) => (
@@ -267,7 +268,7 @@ export default function Template3({ data, accentColor = '#7c3aed' }: Props) {
             </Section>
 
             {/* Additional skills */}
-            <Section title={t.additionalSkills} accent={accent}>
+            <Section title={t.additionalSkills} accent={accent} isRTL={isRTL}>
               {data.additionalSkills.length > 0
                 ? <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
                     {data.additionalSkills.map((s, i) => (
@@ -282,7 +283,7 @@ export default function Template3({ data, accentColor = '#7c3aed' }: Props) {
             </Section>
 
             {/* Interests */}
-            <Section title={t.interests} accent={accent}>
+            <Section title={t.interests} accent={accent} isRTL={isRTL}>
               {data.interests.length > 0
                 ? <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
                     {data.interests.map((s, i) => (
@@ -323,12 +324,12 @@ function EmptySection({ text, isRTL }: { text: string; isRTL: boolean }) {
   )
 }
 
-function Section({ title, accent, children }: { title: string; accent: string; children: React.ReactNode }) {
+function Section({ title, accent, isRTL, children }: { title: string; accent: string; isRTL: boolean; children: React.ReactNode }) {
   return (
     <div>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px', flexDirection: isRTL ? 'row-reverse' : 'row' }}>
         <div style={{ width: '3px', height: '14px', borderRadius: '2px', background: accent, flexShrink: 0 }} />
-        <h2 style={{ margin: 0, fontSize: '12px', fontWeight: 700, color: '#111', letterSpacing: '0.02em' }}>{title}</h2>
+        <h2 style={{ margin: 0, fontSize: '12px', fontWeight: 700, color: '#111', letterSpacing: isRTL ? '0' : '0.02em' }}>{title}</h2>
       </div>
       {children}
     </div>

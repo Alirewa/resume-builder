@@ -52,8 +52,8 @@ export default function Template1({ data, accentColor = '#1e40af' }: Props) {
     fontSize: '10.5px',
     fontWeight: 700,
     color: '#111',
-    textTransform: 'uppercase',
-    letterSpacing: '0.08em',
+    textTransform: isRTL ? 'none' : 'uppercase',
+    letterSpacing: isRTL ? '0' : '0.08em',
     marginBottom: '8px',
     paddingBottom: '4px',
     borderBottom: `2px solid ${accentColor}`,
@@ -61,6 +61,7 @@ export default function Template1({ data, accentColor = '#1e40af' }: Props) {
     alignItems: 'center',
     gap: '5px',
     flexDirection: isRTL ? 'row-reverse' : 'row',
+    justifyContent: isRTL ? 'flex-end' : 'flex-start',
   }
 
   return (

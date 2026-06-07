@@ -48,7 +48,7 @@ export default function PersonalInfoStep() {
               className={`flex-1 py-2 px-1 sm:px-3 rounded-lg text-xs sm:text-sm font-medium transition border-2 cursor-pointer text-center ${
                 language === lang.value
                   ? 'border-blue-600 bg-blue-600 text-white'
-                  : 'border-gray-300 bg-white text-gray-700 hover:border-blue-400 hover:bg-blue-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:hover:border-blue-500'
+                  : 'border-gray-300 bg-white text-gray-700 hover:border-blue-400 hover:bg-blue-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:hover:border-blue-500 dark:hover:bg-gray-600'
               }`}
             >
               <span className="block">{lang.flag}</span>
