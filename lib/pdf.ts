@@ -24,23 +24,21 @@ export async function exportToPdf(elementId: string, filename = 'resume.pdf') {
     // wrapper produces a tiny canvas on mobile. We must clear the transforms
     // and clip constraints before capture, then restore them afterward.
 
-    const wrapper = element.parentElement                   // #preview-template-wrapper
-    const clipDiv = wrapper?.parentElement ?? null          // overflow:hidden clip container
-    const sizerDiv = clipDiv?.parentElement ?? null         // width:210mm sizer
+    const wrapper = element.parentElement        // #preview-template-wrapper
+    const clipDiv = wrapper?.parentElement ?? null  // #preview-clip-div
 
     // Save current styles
     const prev = {
-      wTransform:   wrapper?.style.transform    ?? '',
-      wWidth:       wrapper?.style.width        ?? '',
-      cHeight:      clipDiv?.style.height       ?? '',
-      cOverflow:    clipDiv?.style.overflow     ?? '',
-      sMaxWidth:    sizerDiv?.style.maxWidth    ?? '',
+      wTransform: wrapper?.style.transform ?? '',
+      wWidth:     wrapper?.style.width     ?? '',
+      cHeight:    clipDiv?.style.height    ?? '',
+      cWidth:     clipDiv?.style.width     ?? '',
+      cOverflow:  clipDiv?.style.overflow  ?? '',
     }
 
     // Temporarily lift all scaling/clipping so html2canvas sees the full A4 layout
-    if (wrapper)  { wrapper.style.transform = 'none'; wrapper.style.width = '210mm' }
-    if (clipDiv)  { clipDiv.style.height = 'auto';    clipDiv.style.overflow = 'visible' }
-    if (sizerDiv) { sizerDiv.style.maxWidth = 'none' }
+    if (wrapper) { wrapper.style.transform = 'none'; wrapper.style.width = '210mm' }
+    if (clipDiv) { clipDiv.style.height = 'auto'; clipDiv.style.width = '210mm'; clipDiv.style.overflow = 'visible' }
 
     // Allow the browser one frame to re-layout before capture
     await new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve())))
@@ -57,9 +55,8 @@ export async function exportToPdf(elementId: string, filename = 'resume.pdf') {
       })
     } finally {
       // Always restore — even if capture throws
-      if (wrapper)  { wrapper.style.transform = prev.wTransform; wrapper.style.width = prev.wWidth }
-      if (clipDiv)  { clipDiv.style.height = prev.cHeight;       clipDiv.style.overflow = prev.cOverflow }
-      if (sizerDiv) { sizerDiv.style.maxWidth = prev.sMaxWidth }
+      if (wrapper) { wrapper.style.transform = prev.wTransform; wrapper.style.width = prev.wWidth }
+      if (clipDiv) { clipDiv.style.height = prev.cHeight; clipDiv.style.width = prev.cWidth; clipDiv.style.overflow = prev.cOverflow }
     }
 
     if (!canvas || canvas.width === 0 || canvas.height === 0) {

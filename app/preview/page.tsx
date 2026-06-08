@@ -13,6 +13,8 @@ import {
 } from '@heroicons/react/24/outline'
 
 const A4_PX = 794 // 210mm at 96 dpi
+// Minimum scale so the resume is readable on small screens (even if wider than viewport)
+const MIN_SCALE = 0.62
 
 export default function PreviewPage() {
   const { resume, setTemplate, settings, toggleDarkMode, setAccentColor } = useResumeStore()
@@ -21,32 +23,30 @@ export default function PreviewPage() {
   const dark = settings.darkMode
   const accent = settings.accentColor
 
-  /* ── Mobile scale ── */
+  /* ── Responsive scale ── */
   const [previewScale, setPreviewScale] = useState(1)
   const [clipHeight, setClipHeight] = useState<number | null>(null)
-  const sizerRef = useRef<HTMLDivElement>(null)   // outer sizer — sets available width
-  const wrapRef  = useRef<HTMLDivElement>(null)   // #preview-template-wrapper — has transform
+  const wrapRef = useRef<HTMLDivElement>(null)
 
   const recompute = useCallback(() => {
-    if (!sizerRef.current || !wrapRef.current) return
-    const avail = sizerRef.current.clientWidth
-    if (avail === 0) return
-    const s = Math.min(1, avail / A4_PX)
-    const natH = wrapRef.current.scrollHeight // full height, unaffected by CSS transform
+    if (!wrapRef.current) return
+    // Use full viewport width — the preview area has overflow-x:auto so it can scroll
+    const avail = window.innerWidth
+    const raw = avail / A4_PX
+    // At desktop widths (≥A4), show at 1:1. On smaller screens use min MIN_SCALE for readability.
+    const s = raw >= 1 ? 1 : Math.max(MIN_SCALE, raw)
+    const natH = wrapRef.current.scrollHeight
     setPreviewScale(s)
     setClipHeight(s < 1 ? Math.ceil(natH * s) : null)
   }, [])
 
-  // ResizeObserver on sizer — fires on every layout change, more reliable than window resize
   useEffect(() => {
-    if (!sizerRef.current) return
-    const ro = new ResizeObserver(recompute)
-    ro.observe(sizerRef.current)
     recompute()
-    return () => ro.disconnect()
+    window.addEventListener('resize', recompute)
+    return () => window.removeEventListener('resize', recompute)
   }, [recompute])
 
-  // Re-measure when resume content/template changes (content may grow taller)
+  // Re-measure when resume content/template changes
   useEffect(() => {
     const raf = requestAnimationFrame(() => requestAnimationFrame(recompute))
     return () => cancelAnimationFrame(raf)
@@ -63,40 +63,42 @@ export default function PreviewPage() {
     }
   }
 
+  // Visual width of the scaled template (used to size the clip div correctly)
+  const visualW = previewScale < 1 ? Math.ceil(A4_PX * previewScale) : undefined
+
   return (
     <div className={`min-h-screen flex flex-col transition-colors duration-300 ${dark ? 'bg-gray-950' : 'bg-gray-100'}`}>
 
       {/* ── Top bar ── */}
       <header className={`border-b sticky top-0 z-10 no-print ${dark ? 'bg-gray-900 border-gray-700' : 'bg-white border-gray-200'} shadow-sm`}>
-        <div className="max-w-6xl mx-auto px-3 py-2 flex items-center gap-1.5">
+        <div className="max-w-6xl mx-auto px-2 sm:px-4 py-2 flex items-center gap-1 sm:gap-2">
 
           {/* Back */}
           <Link href="/builder"
-            className={`flex items-center gap-1 text-sm border px-2 py-1.5 rounded-lg transition flex-shrink-0 ${
+            className={`p-1.5 sm:px-3 sm:py-1.5 rounded-lg border transition flex-shrink-0 flex items-center gap-1 ${
               dark ? 'border-gray-600 text-gray-300 hover:bg-gray-800' : 'border-gray-300 text-gray-600 hover:bg-gray-50'
             }`}>
             <ArrowRightIcon className="w-4 h-4" />
-            <span className="hidden md:inline text-xs">ویرایش</span>
+            <span className="hidden sm:inline text-xs">ویرایش</span>
           </Link>
 
-          {/* Logo – only on md+ */}
-          <div className="hidden md:flex items-center gap-1 flex-shrink-0">
+          {/* Logo – md+ only */}
+          <div className="hidden md:flex items-center gap-1.5 flex-shrink-0 mx-1">
             <DocumentTextIcon className="w-4 h-4 text-blue-500" />
             <span className={`font-bold text-sm ${dark ? 'text-gray-200' : 'text-gray-800'}`}>
               رزومه‌ساز <span className="text-blue-500">اختصاصی</span>
             </span>
           </div>
 
-          {/* Spacer */}
           <div className="flex-1" />
 
           {/* Template switcher */}
-          <div className={`flex items-center gap-0.5 p-0.5 rounded-xl flex-shrink-0 ${dark ? 'bg-gray-800' : 'bg-gray-100'}`}>
+          <div className={`flex items-center gap-0.5 p-0.5 rounded-lg flex-shrink-0 ${dark ? 'bg-gray-800' : 'bg-gray-200/70'}`}>
             {([1, 2, 3] as const).map((t) => (
               <button key={t} onClick={() => setTemplate(t)}
-                className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${
+                className={`w-8 h-7 rounded-md text-xs font-bold transition cursor-pointer ${
                   resume.template === t
-                    ? 'bg-white dark:bg-gray-700 shadow text-blue-700 dark:text-blue-400'
+                    ? `${dark ? 'bg-gray-700' : 'bg-white'} shadow text-blue-600 dark:text-blue-400`
                     : dark ? 'text-gray-400 hover:text-gray-200' : 'text-gray-500 hover:text-gray-700'
                 }`}>
                 {t === 1 ? '۱' : t === 2 ? '۲' : '۳'}
@@ -108,7 +110,7 @@ export default function PreviewPage() {
           <div className="relative flex-shrink-0">
             <button
               onClick={(e) => { e.stopPropagation(); setShowColorPicker((v) => !v) }}
-              className={`p-1.5 rounded-xl transition cursor-pointer ${dark ? 'bg-gray-800 hover:bg-gray-700' : 'bg-gray-100 hover:bg-gray-200'}`}
+              className={`p-1.5 rounded-lg transition cursor-pointer ${dark ? 'bg-gray-800 hover:bg-gray-700' : 'bg-gray-200/70 hover:bg-gray-200'}`}
               title="رنگ قالب"
             >
               <SwatchIcon className="w-4 h-4 text-blue-500" />
@@ -138,53 +140,48 @@ export default function PreviewPage() {
 
           {/* Dark mode */}
           <button onClick={toggleDarkMode}
-            className={`p-1.5 rounded-xl transition cursor-pointer flex-shrink-0 ${dark ? 'bg-gray-800 text-yellow-400 hover:bg-gray-700' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>
+            className={`p-1.5 rounded-lg transition cursor-pointer flex-shrink-0 ${dark ? 'bg-gray-800 text-yellow-400 hover:bg-gray-700' : 'bg-gray-200/70 text-gray-600 hover:bg-gray-200'}`}>
             {dark ? <SunIcon className="w-4 h-4" /> : <MoonIcon className="w-4 h-4" />}
           </button>
 
-          {/* Print */}
+          {/* Print – hidden on xs */}
           <button onClick={printResume}
-            className={`flex p-1.5 rounded-xl transition cursor-pointer flex-shrink-0 items-center justify-center ${dark ? 'bg-gray-800 text-gray-300 hover:bg-gray-700' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+            className={`hidden sm:flex p-1.5 rounded-lg transition cursor-pointer flex-shrink-0 items-center justify-center ${dark ? 'bg-gray-800 text-gray-300 hover:bg-gray-700' : 'bg-gray-200/70 text-gray-600 hover:bg-gray-200'}`}
             title="چاپ / ذخیره PDF">
             <PrinterIcon className="w-4 h-4" />
           </button>
 
           {/* PDF download */}
           <button onClick={handleExportPdf} disabled={exporting}
-            className="flex items-center gap-1 text-white font-semibold px-2.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 transition disabled:opacity-60 cursor-pointer disabled:cursor-not-allowed flex-shrink-0 text-xs">
+            className="flex items-center gap-1 text-white font-semibold px-2.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 transition disabled:opacity-60 cursor-pointer disabled:cursor-not-allowed flex-shrink-0 text-xs">
             {exporting
               ? <span className="animate-spin">⏳</span>
-              : <><ArrowDownTrayIcon className="w-4 h-4" /><span>PDF</span></>
+              : <><ArrowDownTrayIcon className="w-3.5 h-3.5" /><span className="hidden xs:inline sm:inline">PDF</span></>
             }
           </button>
         </div>
       </header>
 
-      {/* ── Resume preview ── */}
+      {/* ── Resume preview ──
+        overflow-x: auto lets the preview scroll horizontally when scale > viewport width.
+        The clip div is exactly as wide/tall as the scaled template — no dead space.
+      */}
       <main
         id="preview-page-main"
-        className="flex-1 py-6 sm:py-8 px-4 flex justify-center"
+        className="flex-1 py-5 sm:py-8 overflow-x-auto"
         onClick={() => setShowColorPicker(false)}
       >
-        {/*
-          sizerRef: full available width container — used to compute scale
-          clipHeight: when scaled, clip the extra layout space left by CSS transform
-        */}
-        <div
-          ref={sizerRef}
-          id="preview-sizer"
-          style={{
-            width: '210mm',
-            maxWidth: '100%',
-          }}
-        >
+        <div style={{ display: 'flex', justifyContent: 'center', minHeight: '100%' }}>
           <div
             id="preview-clip-div"
             style={{
               overflow: 'hidden',
+              // Width = visual width of scaled template so the full resume is visible
+              width: visualW != null ? `${visualW}px` : '210mm',
               height: clipHeight != null ? `${clipHeight}px` : 'auto',
-              boxShadow: '0 8px 40px rgba(0,0,0,0.2)',
+              boxShadow: '0 8px 40px rgba(0,0,0,0.18)',
               borderRadius: '4px',
+              flexShrink: 0,
             }}
           >
             <div
@@ -204,8 +201,8 @@ export default function PreviewPage() {
         </div>
       </main>
 
-      <div className={`text-center py-3 text-xs no-print ${dark ? 'text-gray-600' : 'text-gray-400'}`}>
-        برای بهترین خروجی: دکمه 🖨️ را بزنید و در مرورگر «Save as PDF» را انتخاب کنید
+      <div className={`text-center py-2 text-xs no-print ${dark ? 'text-gray-600' : 'text-gray-400'}`}>
+        بهترین خروجی: دکمه 🖨️ چاپ → «Save as PDF» در مرورگر
       </div>
 
       {/* Footer */}
