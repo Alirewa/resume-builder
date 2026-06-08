@@ -2,7 +2,7 @@
 
 A client-side resume builder supporting **Persian (RTL)**, **English**, and **German** — with 3 professional templates and PDF export.
 
-**Live demo → [alirewa.github.io/resume-builder](https://alirewa.github.io/resume-builder/)**
+**Live demo → [alirewa.github.io/Resume-Builder](https://alirewa.github.io/Resume-Builder/)**
 
 ---
 
@@ -29,8 +29,8 @@ A client-side resume builder supporting **Persian (RTL)**, **English**, and **Ge
 ## Run locally
 
 ```bash
-git clone https://github.com/Alirewa/resume-builder.git
-cd resume-builder
+git clone https://github.com/Alirewa/Resume-Builder.git
+cd Resume-Builder
 npm install
 npm run dev          # → http://localhost:3000
 ```
